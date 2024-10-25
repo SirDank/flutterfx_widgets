@@ -1,23 +1,22 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class HyperText extends StatefulWidget {
   final String text;
   final Duration duration;
-  final TextStyle? textStyle;
+  final TextStyle? style;
   final bool animationTrigger;
   final bool animateOnLoad;
 
   const HyperText({
-    Key? key,
+    super.key,
     required this.text,
     this.duration = const Duration(milliseconds: 800),
-    this.textStyle,
+    this.style,
     this.animationTrigger = false,
     this.animateOnLoad = true,
-  }) : super(key: key);
+  });
 
   @override
   _HyperTextState createState() => _HyperTextState();
@@ -56,7 +55,7 @@ class _HyperTextState extends State<HyperText> {
     final currentAnimationCount = animationCount;
 
     _timer = Timer.periodic(
-      widget.duration ~/ (widget.text.length * 10),
+      widget.duration ~/ (widget.text.isNotEmpty ? widget.text.length * 10 : 10),
       (timer) {
         if (!widget.animateOnLoad && isFirstRender) {
           timer.cancel();
@@ -104,9 +103,9 @@ class _HyperTextState extends State<HyperText> {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 50),
             child: Text(
-              displayText[index].toUpperCase(),
+              displayText[index],
               key: ValueKey<String>('$animationCount-$index'),
-              style: widget.textStyle ?? Theme.of(context).textTheme.titleLarge,
+              style: widget.style ?? Theme.of(context).textTheme.titleLarge,
             ),
           );
         }),
